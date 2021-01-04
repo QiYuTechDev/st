@@ -1,7 +1,5 @@
 use std::fs;
 
-use toml;
-
 use crate::public::StTrait;
 use crate::utils;
 
@@ -17,10 +15,10 @@ impl Poetry {
             return false;
         }
 
-        if let Some(_) = self.get_poetry_config() {
+        if self.get_poetry_config().is_some() {
             return true;
         }
-        return false;
+        false
     }
 
     /// 获取源代码的目录
@@ -37,7 +35,7 @@ impl Poetry {
         if let Some(Some(dir)) = name {
             return Some(dir.replace("-", "_"));
         }
-        return None;
+        None
     }
 
     /// 获取 poetry 的配置
@@ -61,7 +59,7 @@ impl Poetry {
             }
         }
 
-        return None;
+        None
     }
 
     #[inline]
@@ -81,7 +79,7 @@ impl Poetry {
             println!("{} 不存在, 请在 pyproject.tmol 中添加相应的依赖.", name);
             return false;
         }
-        return true;
+        true
     }
 }
 
@@ -113,7 +111,7 @@ impl StTrait for Poetry {
         if !support {
             println!("格式化代码依赖: black, 请先安装");
         }
-        return support;
+        support
     }
 
     fn do_format(&self) {
@@ -155,7 +153,7 @@ impl StTrait for Poetry {
         if !support {
             println!("测试依赖 pytest, 请先安装");
         }
-        return support;
+        support
     }
 
     fn do_test(&self) {

@@ -26,7 +26,7 @@ pub fn run_with_args(bin: PathBuf, args: Vec<String>) -> bool {
     let o = process::Command::new(bin)
         .args(&args)
         .status()
-        .expect(failure_msg.as_str());
+        .unwrap_or_else(|e| panic!("msg: {}, error: {}", failure_msg, e));
 
     if o.success() {
         println!("{}", success_msg);
