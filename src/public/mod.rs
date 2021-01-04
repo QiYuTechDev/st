@@ -51,4 +51,28 @@ pub trait StTrait {
         false
     }
     fn do_test(&self) {}
+
+    /// 同步依赖
+    fn support_sync(&self) -> bool {
+        false
+    }
+    fn do_sync(&self) {}
+
+    /// 锁定 依赖文件
+    fn support_lock(&self) -> bool {
+        false
+    }
+    fn do_lock(&self) {}
+
+    /// 发布到中心仓库
+    fn support_publish(&self) -> bool {
+        false
+    }
+    fn do_publish(&self) {}
+
+    /// 本地安装
+    fn support_install(&self) -> bool {
+        false
+    }
+    fn do_install(&self) {}
 }

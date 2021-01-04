@@ -47,6 +47,20 @@ pub enum StCli {
     ///
     /// Rust 语言使用 cargo test
     Test,
+    /// 同步依赖
+    Sync,
+    /// 锁定依赖
+    ///
+    /// 锁定当前的依赖
+    Lock,
+    /// 本地安装
+    ///
+    /// 本地安装当前的软件包
+    Install,
+    /// 发布
+    ///
+    /// 发布到中心仓库
+    Publish,
 }
 
 impl StCli {
@@ -60,6 +74,10 @@ impl StCli {
             StCli::Run => run_cmd::run_run_cmd(),
             StCli::Update => run_cmd::run_update_cmd(),
             StCli::Test => run_cmd::run_test_cmd(),
+            StCli::Sync => run_cmd::run_sync_cmd(),
+            StCli::Lock => run_cmd::run_lock_cmd(),
+            StCli::Install => run_cmd::run_install_cmd(),
+            StCli::Publish => run_cmd::run_publish_cmd(),
         }
     }
 }

@@ -34,6 +34,22 @@ pub fn run_test_cmd() {
     do_run_all_cmd(|p| p.support_test(), |p| p.do_test())
 }
 
+pub fn run_sync_cmd() {
+    do_run_all_cmd(|p| p.support_sync(), |p| p.do_sync())
+}
+
+pub fn run_lock_cmd() {
+    do_run_all_cmd(|p| p.support_lock(), |p| p.do_lock())
+}
+
+pub fn run_install_cmd() {
+    do_run_all_cmd(|p| p.support_install(), |p| p.do_install())
+}
+
+pub fn run_publish_cmd() {
+    do_run_all_cmd(|p| p.support_publish(), |p| p.do_publish())
+}
+
 fn do_run_all_cmd<P, R>(check_fn: P, do_fn: R)
 where
     P: Fn(&Box<dyn StTrait>) -> bool,
