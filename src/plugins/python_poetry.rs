@@ -69,6 +69,20 @@ impl Poetry {
         let poetry = utils::get_exec_path("poetry");
         utils::run_with_args(poetry, args)
     }
+
+    /// 检测 poetry 中是否已经安装了相应的工具
+    fn check_poetry_tools_exists(&self, name: &str) -> bool {
+        println!("检测 {} 是否存在:", name);
+        if !self.poetry_run(vec![
+            "run".to_string(),
+            "which".to_string(),
+            name.to_string(),
+        ]) {
+            println!("{} 不存在, 请在 pyproject.tmol 中添加相应的依赖.", name);
+            return false;
+        }
+        return true;
+    }
 }
 
 impl StTrait for Poetry {
@@ -95,21 +109,10 @@ impl StTrait for Poetry {
             return false;
         }
 
-        println!("检测 black 是否存在:");
-        if !self.poetry_run(vec![
-            "run".to_string(),
-            "which".to_string(),
-            "black".to_string(),
-        ]) {
-            println!("black 不存在, 请在 pyproject.tmol 中的依赖中添加 black");
-            return false;
-        }
-        println!("black 存在, 可以执行格式化代码任务.");
-        return true;
+        return self.check_poetry_tools_exists("black");
     }
 
     fn do_format(&self) {
-        // check black exists
         self.poetry_run(vec![
             "run".to_string(),
             "black".to_string(),
@@ -137,5 +140,21 @@ impl StTrait for Poetry {
 
     fn do_update(&self) {
         self.poetry_run(vec!["update".to_string()]);
+    }
+
+    fn support_test(&self) -> bool {
+        if !self.check_py_project() {
+            return false;
+        }
+
+        return self.check_poetry_tools_exists("pytest");
+    }
+
+    fn do_test(&self) {
+        self.poetry_run(vec![
+            "run".to_string(),
+            "pytest".to_string(),
+            self.get_src_dir().expect("获取源码目录失败"),
+        ]);
     }
 }
