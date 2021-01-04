@@ -1,0 +1,14 @@
+[package]
+name = "st"
+version = "0.1.0"
+authors = ["QiYuTech <admin@qiyutech.tech>"]
+edition = "2018"
+
+[[bin]]
+name = "st"
+path = "src/bins/main.rs"
+
+[dependencies]
+structopt = "0.3"
+
+which = "4.0"
