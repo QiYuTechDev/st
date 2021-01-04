@@ -9,13 +9,23 @@ pub(crate) mod utils;
 #[structopt(name = "st")]
 pub enum StCli {
     /// 编译
+    ///
+    /// Rust 项目 默认使用: cargo build
+    /// npm 项目 不支持
+    /// poetry 项目 默认使用: poetry build 打包
     Build,
-    /// 回滚到干净的环境
+    /// 清理开发环境
+    ///
+    /// Rust 使用 cargo clean
+    /// npm 清理缓存 npm cache clean
+    /// poetry 不支持
+    ///
     Clean,
     /// 格式化代码
     ///
     /// 当前支持 Python poetry 的项目 [需要安装 black]
-    ///
+    /// Rust 项目 cargo fmt
+    /// npm 项目使用 prettier
     ///
     Format,
     /// 检测依赖是否有新版

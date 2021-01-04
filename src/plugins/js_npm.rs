@@ -49,6 +49,7 @@ impl StTrait for Npm {
     /// 格式化代码
     /// 使用 `prettier` 工具格式化
     /// 应该测试 :)
+    /// doc: https://prettier.io/
     fn do_format(&self) {
         self.npm_run(vec!["run".to_string(), "prettier".to_string()])
     }
