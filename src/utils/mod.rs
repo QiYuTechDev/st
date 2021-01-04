@@ -14,6 +14,9 @@ pub fn get_exec_path(name: &str) -> PathBuf {
 }
 
 /// 使用 args 运行 bin
+///
+/// fix: 使用这个运行有可能暴露 token 出来
+/// 因此只允许交互式的 publish 不允许
 pub fn run_with_args(bin: PathBuf, args: Vec<String>) -> bool {
     let bin_s = bin.to_str().map(String::from).expect("bin is unknown");
 
