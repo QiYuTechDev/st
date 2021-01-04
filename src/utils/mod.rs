@@ -17,9 +17,7 @@ pub fn get_exec_path(name: &str) -> PathBuf {
 pub fn run_with_args(bin: PathBuf, args: Vec<String>) -> bool {
     let bin_s = bin.to_str().map(String::from).expect("bin is unknown");
 
-    let args_s = args.join(" ");
-
-    let failure_msg = format!("执行命令: {} {} 失败!", bin_s, args_s);
+    let failure_msg = format!("执行命令: {} {} 失败!", bin_s, args.join(" "));
 
     let o = process::Command::new(bin)
         .args(&args)
