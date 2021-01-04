@@ -19,17 +19,14 @@ pub fn run_with_args(bin: PathBuf, args: Vec<String>) -> bool {
 
     let args_s = args.join(" ");
 
-    let success_msg = format!("执行命令: {} {} 成功!", bin_s, args_s);
     let failure_msg = format!("执行命令: {} {} 失败!", bin_s, args_s);
 
-    println!("开始执行命令: {} {}", bin_s, args_s);
     let o = process::Command::new(bin)
         .args(&args)
         .status()
         .unwrap_or_else(|e| panic!("msg: {}, error: {}", failure_msg, e));
 
     if o.success() {
-        println!("{}", success_msg);
         true
     } else {
         eprintln!("{}", failure_msg);
