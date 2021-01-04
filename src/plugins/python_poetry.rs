@@ -70,13 +70,12 @@ impl Poetry {
 
     /// 检测 poetry 中是否已经安装了相应的工具
     fn check_poetry_tools_exists(&self, name: &str) -> bool {
-        println!("检测 {} 是否存在:", name);
         if !self.poetry_run(vec![
             "run".to_string(),
             "which".to_string(),
             name.to_string(),
         ]) {
-            println!("{} 不存在, 请在 pyproject.tmol 中添加相应的依赖.", name);
+            println!("{} 不存在, 请先安装", name);
             return false;
         }
         true
@@ -106,12 +105,7 @@ impl StTrait for Poetry {
         if !self.check_poetry_project() {
             return false;
         }
-
-        let support = self.check_poetry_tools_exists("black");
-        if !support {
-            println!("格式化代码依赖: black, 请先安装");
-        }
-        support
+        self.check_poetry_tools_exists("black")
     }
 
     fn do_format(&self) {
@@ -148,11 +142,7 @@ impl StTrait for Poetry {
         if !self.check_poetry_project() {
             return false;
         }
-        let support = self.check_poetry_tools_exists("pylama");
-        if !support {
-            println!("请先安装 pylama");
-        }
-        support
+        self.check_poetry_tools_exists("pylama")
     }
 
     fn do_lint(&self) {
@@ -168,11 +158,7 @@ impl StTrait for Poetry {
             return false;
         }
 
-        let support = self.check_poetry_tools_exists("pytest");
-        if !support {
-            println!("测试依赖 pytest, 请先安装");
-        }
-        support
+        self.check_poetry_tools_exists("pytest")
     }
 
     fn do_test(&self) {

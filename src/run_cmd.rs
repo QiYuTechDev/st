@@ -39,14 +39,17 @@ where
     P: Fn(&Box<dyn StTrait>) -> bool,
     R: Fn(&Box<dyn StTrait>),
 {
+    let mut hint = false;
     get_all_cmd().into_iter().for_each(|v| {
         if check_fn(&v) {
-            println!("use: {}", v.name());
+            hint = true;
             do_fn(&v)
-        } else {
-            println!("{} IGNORED!", v.name());
         }
     });
+    if !hint {
+        println!("没有找到处理工具");
+        std::process::exit(1);
+    }
 }
 
 fn get_all_cmd() -> Vec<Box<dyn StTrait>> {
