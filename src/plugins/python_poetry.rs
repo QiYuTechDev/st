@@ -27,21 +27,23 @@ impl Poetry {
     fn get_src_dir(&self) -> Option<String> {
         let name = self.get_poetry_config().map(|v| -> Option<String> {
             if let Some(name) = v.get("name") {
-                if let Some(s) = name.to_string() {
-                    return s;
+                if name.is_str() {
+                    return Some(name.to_string());
                 }
             }
             None
         });
 
         if let Some(Some(dir)) = name {
-            Some(dir.replace("-", "_"))
+            return Some(dir.replace("-", "_"));
         }
         return None;
     }
 
     /// 获取 poetry 的配置
     fn get_poetry_config(&self) -> Option<toml::Value> {
+        let f = "pyproject.toml";
+
         // extract to utils
         let s = fs::read_to_string(f).expect("读取 pyproject.toml 失败!");
         let v = toml::from_str::<toml::Value>(s.as_str()).expect("解析 pyproject.toml 失败");
@@ -97,7 +99,7 @@ impl StTrait for Poetry {
             "run".to_string(),
             "which".to_string(),
             "black".to_string(),
-            self.get_src_dir(),
+            self.get_src_dir().expect("获取源码目录失败"),
         ]) {
             return false;
         }
