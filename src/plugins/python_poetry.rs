@@ -27,8 +27,8 @@ impl Poetry {
     fn get_src_dir(&self) -> Option<String> {
         let name = self.get_poetry_config().map(|v| -> Option<String> {
             if let Some(name) = v.get("name") {
-                if name.is_str() {
-                    return Some(name.to_string());
+                if let Some(s) = name.as_str() {
+                    return Some(String::from(s));
                 }
             }
             None
@@ -99,7 +99,6 @@ impl StTrait for Poetry {
             "run".to_string(),
             "which".to_string(),
             "black".to_string(),
-            self.get_src_dir().expect("获取源码目录失败"),
         ]) {
             return false;
         }
@@ -108,7 +107,11 @@ impl StTrait for Poetry {
 
     fn do_format(&self) {
         // check black exists
-        self.poetry_run(vec!["run".to_string(), "black".to_string()]);
+        self.poetry_run(vec![
+            "run".to_string(),
+            "black".to_string(),
+            self.get_src_dir().expect("获取源码目录失败"),
+        ]);
     }
 
     fn support_outdated(&self) -> bool {
