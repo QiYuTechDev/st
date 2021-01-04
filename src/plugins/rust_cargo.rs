@@ -86,4 +86,16 @@ impl StTrait for Cargo {
     fn do_test(&self) {
         self.cargo_run(vec!["test".to_string()])
     }
+
+    fn support_install(&self) -> bool {
+        self.check_cargo_project()
+    }
+
+    fn do_install(&self) {
+        self.cargo_run(vec![
+            "install".to_string(),
+            "--path".to_string(),
+            ".".to_string(),
+        ])
+    }
 }
