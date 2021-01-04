@@ -14,7 +14,7 @@ pub fn get_exec_path(name: &str) -> PathBuf {
 }
 
 /// 使用 args 运行 bin
-pub fn run_with_args(bin: PathBuf, args: Vec<String>) {
+pub fn run_with_args(bin: PathBuf, args: Vec<String>) -> bool {
     let bin_s = bin.to_str().map(String::from).expect("bin is unknown");
 
     let args_s = args.join(" ");
@@ -30,8 +30,10 @@ pub fn run_with_args(bin: PathBuf, args: Vec<String>) {
 
     if o.success() {
         println!("{}", success_msg);
+        true
     } else {
         eprintln!("{}", failure_msg);
+        false
     }
 }
 
