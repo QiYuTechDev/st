@@ -95,13 +95,16 @@ impl StTrait for Poetry {
             return false;
         }
 
+        println!("检测 black 是否存在:");
         if !self.poetry_run(vec![
             "run".to_string(),
             "which".to_string(),
             "black".to_string(),
         ]) {
+            println!("black 不存在, 请在 pyproject.tmol 中的依赖中添加 black");
             return false;
         }
+        println!("black 存在, 可以执行格式化代码任务.");
         return true;
     }
 
