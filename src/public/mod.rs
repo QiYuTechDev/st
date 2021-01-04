@@ -38,4 +38,17 @@ pub trait StTrait {
         false
     }
     fn do_update(&self) {}
+
+    /// 支持 `lint` 命令
+    /// C 程序员应该知道这是啥意思 :)
+    fn support_lint(&self) -> bool {
+        false
+    }
+    fn do_lint(&self) {}
+
+    /// 是否支持一键测试
+    fn support_test(&self) -> bool {
+        false
+    }
+    fn do_test(&self) {}
 }

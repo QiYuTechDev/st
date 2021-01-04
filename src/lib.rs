@@ -17,23 +17,36 @@ pub enum StCli {
     /// 清理开发环境
     ///
     /// Rust 使用 cargo clean
+    ///
     /// npm 清理缓存 npm cache clean
+    ///
     /// poetry 不支持
     ///
     Clean,
     /// 格式化代码
     ///
-    /// 当前支持 Python poetry 的项目 [需要安装 black]
-    /// Rust 项目 cargo fmt
-    /// npm 项目使用 prettier
+    /// 当前支持
     ///
+    /// Python poetry 的项目 [需要安装 black]
+    ///
+    /// Rust 项目 cargo fmt
+    ///
+    /// npm 项目使用 prettier
     Format,
+    /// 代码检测
+    ///
+    /// Rust 使用 Cargo clippy
+    Lint,
     /// 检测依赖是否有新版
     Outdated,
     /// 运行
     Run,
     /// 升级依赖版本
     Update,
+    /// 测试
+    ///
+    /// Rust 语言使用 cargo test
+    Test,
 }
 
 impl StCli {
@@ -42,9 +55,11 @@ impl StCli {
             StCli::Build => run_cmd::run_build_cmd(),
             StCli::Clean => run_cmd::run_clean_cmd(),
             StCli::Format => run_cmd::run_format_cmd(),
+            StCli::Lint => run_cmd::run_lint_cmd(),
             StCli::Outdated => run_cmd::run_outdated_cmd(),
             StCli::Run => run_cmd::run_run_cmd(),
             StCli::Update => run_cmd::run_update_cmd(),
+            StCli::Test => run_cmd::run_test_cmd(),
         }
     }
 }

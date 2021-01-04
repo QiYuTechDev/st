@@ -47,6 +47,14 @@ impl StTrait for Cargo {
         self.cargo_run(vec!["fmt".to_string()])
     }
 
+    fn support_lint(&self) -> bool {
+        self.check_cargo_project()
+    }
+
+    fn do_lint(&self) {
+        self.cargo_run(vec!["clippy".to_string()])
+    }
+
     fn support_outdated(&self) -> bool {
         self.check_cargo_project()
     }
@@ -69,5 +77,13 @@ impl StTrait for Cargo {
 
     fn do_update(&self) {
         self.cargo_run(vec!["update".to_string()])
+    }
+
+    fn support_test(&self) -> bool {
+        self.check_cargo_project()
+    }
+
+    fn do_test(&self) {
+        self.cargo_run(vec!["test".to_string()])
     }
 }

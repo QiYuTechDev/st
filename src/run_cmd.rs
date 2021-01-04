@@ -14,6 +14,10 @@ pub fn run_format_cmd() {
     do_run_all_cmd(|p| p.support_format(), |p| p.do_format())
 }
 
+pub fn run_lint_cmd() {
+    do_run_all_cmd(|p| p.support_lint(), |p| p.do_lint())
+}
+
 pub fn run_outdated_cmd() {
     do_run_all_cmd(|p| p.support_outdated(), |p| p.do_outdated())
 }
@@ -24,6 +28,10 @@ pub fn run_run_cmd() {
 
 pub fn run_update_cmd() {
     do_run_all_cmd(|p| p.support_update(), |p| p.do_update())
+}
+
+pub fn run_test_cmd() {
+    do_run_all_cmd(|p| p.support_test(), |p| p.do_test())
 }
 
 fn do_run_all_cmd<P, R>(check_fn: P, do_fn: R)
