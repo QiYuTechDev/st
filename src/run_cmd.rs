@@ -32,11 +32,11 @@ where
     R: Fn(&Box<dyn StTrait>),
 {
     get_all_cmd().into_iter().for_each(|v| {
-        println!("find: {}", v.name());
         if check_fn(&v) {
+            println!("use: {}", v.name());
             do_fn(&v)
         } else {
-            println!("{} is not support, IGNORED!", v.name());
+            println!("{} IGNORED!", v.name());
         }
     });
 }

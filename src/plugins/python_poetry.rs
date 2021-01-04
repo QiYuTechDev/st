@@ -16,24 +16,50 @@ impl Poetry {
         if !utils::check_current_dir_file_exists(f) {
             return false;
         }
+
+        if let Some(_) = self.get_poetry_config() {
+            return true;
+        }
+        return false;
+    }
+
+    /// 获取源代码的目录
+    fn get_src_dir(&self) -> Option<String> {
+        let name = self.get_poetry_config().map(|v| -> Option<String> {
+            if let Some(name) = v.get("name") {
+                if let Some(s) = name.to_string() {
+                    return s;
+                }
+            }
+            None
+        });
+
+        if let Some(Some(dir)) = name {
+            Some(dir.replace("-", "_"))
+        }
+        return None;
+    }
+
+    /// 获取 poetry 的配置
+    fn get_poetry_config(&self) -> Option<toml::Value> {
         // extract to utils
         let s = fs::read_to_string(f).expect("读取 pyproject.toml 失败!");
         let v = toml::from_str::<toml::Value>(s.as_str()).expect("解析 pyproject.toml 失败");
         if !v.is_table() {
-            return false;
+            return None;
         }
 
         // tool.poetry 存在 才证明是 poetry 项目
         if let Some(tool) = v.get("tool") {
             if !tool.is_table() {
-                return false;
+                return None;
             }
-            if let Some(_) = tool.get("poetry") {
-                return true;
+            if let Some(poetry) = tool.get("poetry") {
+                return Some(poetry.clone());
             }
         }
 
-        return false;
+        return None;
     }
 
     #[inline]
@@ -71,6 +97,7 @@ impl StTrait for Poetry {
             "run".to_string(),
             "which".to_string(),
             "black".to_string(),
+            self.get_src_dir(),
         ]) {
             return false;
         }
