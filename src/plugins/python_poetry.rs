@@ -109,7 +109,11 @@ impl StTrait for Poetry {
             return false;
         }
 
-        return self.check_poetry_tools_exists("black");
+        let support = self.check_poetry_tools_exists("black");
+        if !support {
+            println!("格式化代码依赖: black, 请先安装");
+        }
+        return support;
     }
 
     fn do_format(&self) {
@@ -147,7 +151,11 @@ impl StTrait for Poetry {
             return false;
         }
 
-        return self.check_poetry_tools_exists("pytest");
+        let support = self.check_poetry_tools_exists("pytest");
+        if !support {
+            println!("测试依赖 pytest, 请先安装");
+        }
+        return support;
     }
 
     fn do_test(&self) {
