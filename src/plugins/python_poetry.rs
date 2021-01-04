@@ -9,7 +9,7 @@ pub struct Poetry {}
 
 impl Poetry {
     #[inline]
-    fn check_py_project(&self) -> bool {
+    fn check_poetry_project(&self) -> bool {
         let f = "pyproject.toml";
         if !utils::check_current_dir_file_exists(f) {
             return false;
@@ -89,7 +89,7 @@ impl StTrait for Poetry {
     }
 
     fn support_build(&self) -> bool {
-        self.check_py_project()
+        self.check_poetry_project()
     }
 
     fn do_build(&self) {
@@ -103,7 +103,7 @@ impl StTrait for Poetry {
     fn do_clean(&self) {}
 
     fn support_format(&self) -> bool {
-        if !self.check_py_project() {
+        if !self.check_poetry_project() {
             return false;
         }
 
@@ -123,7 +123,7 @@ impl StTrait for Poetry {
     }
 
     fn support_outdated(&self) -> bool {
-        self.check_py_project()
+        self.check_poetry_project()
     }
 
     fn do_outdated(&self) {
@@ -137,15 +137,33 @@ impl StTrait for Poetry {
     fn do_run(&self) {}
 
     fn support_update(&self) -> bool {
-        self.check_py_project()
+        self.check_poetry_project()
     }
 
     fn do_update(&self) {
         self.poetry_run(vec!["update".to_string()]);
     }
 
+    fn support_lint(&self) -> bool {
+        if !self.check_poetry_project() {
+            return false;
+        }
+        let support = self.check_poetry_tools_exists("pylama");
+        if !support {
+            println!("请先安装 pylama");
+        }
+        support
+    }
+
+    fn do_lint(&self) {
+        self.poetry_run(vec![
+            "pylama".to_string(),
+            self.get_src_dir().expect("获取源代码目录失败"),
+        ]);
+    }
+
     fn support_test(&self) -> bool {
-        if !self.check_py_project() {
+        if !self.check_poetry_project() {
             return false;
         }
 
