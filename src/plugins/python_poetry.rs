@@ -157,6 +157,7 @@ impl StTrait for Poetry {
 
     fn do_lint(&self) {
         self.poetry_run(vec![
+            "run".to_string(),
             "pylama".to_string(),
             self.get_src_dir().expect("获取源代码目录失败"),
         ]);
