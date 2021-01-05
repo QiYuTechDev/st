@@ -1,4 +1,4 @@
-use crate::plugins::{Cargo, Npm, Poetry};
+use crate::plugins::{Cargo, Django, Npm, Poetry};
 use crate::public::StTrait;
 
 /// 运行 `build` 命令
@@ -73,5 +73,6 @@ fn get_all_cmd() -> Vec<Box<dyn StTrait>> {
         Box::new(Cargo::default()),
         Box::new(Npm::default()),
         Box::new(Poetry::default()),
+        Box::new(Django::default()),
     ]
 }

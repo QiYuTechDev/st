@@ -9,7 +9,7 @@ pub struct Poetry {}
 
 impl Poetry {
     #[inline]
-    fn check_poetry_project(&self) -> bool {
+    pub fn check_poetry_project() -> bool {
         let f = "pyproject.toml";
         if !utils::check_current_dir_file_exists(f) {
             return false;
@@ -22,8 +22,8 @@ impl Poetry {
     }
 
     /// 获取源代码的目录
-    fn get_src_dir(&self) -> Option<String> {
-        let name = self.get_poetry_config().map(|v| -> Option<String> {
+    pub fn get_src_dir() -> Option<String> {
+        let name = Self::get_poetry_config().map(|v| -> Option<String> {
             if let Some(name) = v.get("name") {
                 if let Some(s) = name.as_str() {
                     return Some(String::from(s));
@@ -39,7 +39,7 @@ impl Poetry {
     }
 
     /// 获取 poetry 的配置
-    fn get_poetry_config(&self) -> Option<toml::Value> {
+    pub fn get_poetry_config() -> Option<toml::Value> {
         let f = "pyproject.toml";
 
         // extract to utils
@@ -63,14 +63,14 @@ impl Poetry {
     }
 
     #[inline]
-    fn poetry_run(&self, args: Vec<String>) -> bool {
+    pub fn poetry_run(args: Vec<String>) -> bool {
         let poetry = utils::get_exec_path("poetry");
         utils::run_with_args(poetry, args)
     }
 
     /// 检测 poetry 中是否已经安装了相应的工具
-    fn check_poetry_tools_exists(&self, name: &str) -> bool {
-        if !self.poetry_run(vec![
+    pub fn check_poetry_tools_exists(name: &str) -> bool {
+        if !Self::poetry_run(vec![
             "run".to_string(),
             "which".to_string(),
             name.to_string(),
@@ -88,7 +88,7 @@ impl StTrait for Poetry {
     }
 
     fn support_build(&self) -> bool {
-        self.check_poetry_project()
+        Self::check_poetry_project()
     }
 
     fn do_build(&self) {
