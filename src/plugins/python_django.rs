@@ -10,7 +10,14 @@ use crate::utils;
 pub struct Django {}
 
 impl Django {
+    fn set_django_env() {
+        let src = Poetry::get_src_dir().expect("获取源代码目录失败");
+        std::env::set_var("DJANGO_SETTINGS_MODULE", format!("{}.wsgi", src));
+    }
+
     fn poetry_django_admin_run(args: Vec<String>) {
+        Self::set_django_env();
+
         let cur_dir = std::env::current_dir().expect("获取当前目录失败");
 
         let full_args = {
