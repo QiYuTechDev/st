@@ -15,7 +15,7 @@ impl Poetry {
             return false;
         }
 
-        if self.get_poetry_config().is_some() {
+        if Self::get_poetry_config().is_some() {
             return true;
         }
         false
@@ -92,7 +92,7 @@ impl StTrait for Poetry {
     }
 
     fn do_build(&self) {
-        self.poetry_run(vec!["build".to_string()]);
+        Self::poetry_run(vec!["build".to_string()]);
     }
 
     fn support_clean(&self) -> bool {
@@ -102,26 +102,26 @@ impl StTrait for Poetry {
     fn do_clean(&self) {}
 
     fn support_format(&self) -> bool {
-        if !self.check_poetry_project() {
+        if !Self::check_poetry_project() {
             return false;
         }
-        self.check_poetry_tools_exists("black")
+        Self::check_poetry_tools_exists("black")
     }
 
     fn do_format(&self) {
-        self.poetry_run(vec![
+        Self::poetry_run(vec![
             "run".to_string(),
             "black".to_string(),
-            self.get_src_dir().expect("获取源码目录失败"),
+            Self::get_src_dir().expect("获取源码目录失败"),
         ]);
     }
 
     fn support_outdated(&self) -> bool {
-        self.check_poetry_project()
+        Self::check_poetry_project()
     }
 
     fn do_outdated(&self) {
-        self.poetry_run(vec!["show".to_string(), "-o".to_string()]);
+        Self::poetry_run(vec!["show".to_string(), "-o".to_string()]);
     }
 
     fn support_run(&self) -> bool {
@@ -131,41 +131,41 @@ impl StTrait for Poetry {
     fn do_run(&self) {}
 
     fn support_update(&self) -> bool {
-        self.check_poetry_project()
+        Self::check_poetry_project()
     }
 
     fn do_update(&self) {
-        self.poetry_run(vec!["update".to_string()]);
+        Self::poetry_run(vec!["update".to_string()]);
     }
 
     fn support_lint(&self) -> bool {
-        if !self.check_poetry_project() {
+        if !Self::check_poetry_project() {
             return false;
         }
-        self.check_poetry_tools_exists("pylama")
+        Self::check_poetry_tools_exists("pylama")
     }
 
     fn do_lint(&self) {
-        self.poetry_run(vec![
+        Self::poetry_run(vec![
             "run".to_string(),
             "pylama".to_string(),
-            self.get_src_dir().expect("获取源代码目录失败"),
+            Self::get_src_dir().expect("获取源代码目录失败"),
         ]);
     }
 
     fn support_test(&self) -> bool {
-        if !self.check_poetry_project() {
+        if !Self::check_poetry_project() {
             return false;
         }
 
-        self.check_poetry_tools_exists("pytest")
+        Self::check_poetry_tools_exists("pytest")
     }
 
     fn do_test(&self) {
-        self.poetry_run(vec![
+        Self::poetry_run(vec![
             "run".to_string(),
             "pytest".to_string(),
-            self.get_src_dir().expect("获取源码目录失败"),
+            Self::get_src_dir().expect("获取源码目录失败"),
         ]);
     }
 }
