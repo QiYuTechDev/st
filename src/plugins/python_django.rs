@@ -10,7 +10,7 @@ pub struct Django {}
 impl Django {
     fn set_django_env() {
         let src = Poetry::ensure_get_src_dir();
-        env::set_var("DJANGO_SETTINGS_MODULE", format!("{}.wsgi", src));
+        env::set_var("DJANGO_SETTINGS_MODULE", format!("{}/settings", src));
         env::set_var("DJANGO_LOCAL", "1")
     }
 
