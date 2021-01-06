@@ -73,8 +73,11 @@ impl StTrait for Django {
     }
 
     fn do_run(&self) {
+        println!("django start make migrations ...");
         Self::poetry_django_admin_run(vec!["makemigrations".to_string()]);
+        println!("django start migrate ...");
         Self::poetry_django_admin_run(vec!["migrate".to_string()]);
+        println!("django start run server ...");
         Self::poetry_django_admin_run(vec!["runserver".to_string()]);
     }
 
