@@ -73,7 +73,9 @@ impl StTrait for Django {
     }
 
     fn do_run(&self) {
-        Self::poetry_django_admin_run(vec!["runserver".to_string()])
+        Self::poetry_django_admin_run(vec!["makemigrations".to_string()]);
+        Self::poetry_django_admin_run(vec!["migrate".to_string()]);
+        Self::poetry_django_admin_run(vec!["runserver".to_string()]);
     }
 
     fn support_lint(&self) -> bool {
