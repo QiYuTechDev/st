@@ -2,6 +2,7 @@ use std::env;
 
 use super::Poetry;
 use crate::public::StTrait;
+use crate::utils;
 
 /// Python Django Build Runner
 #[derive(Default)]
@@ -10,8 +11,8 @@ pub struct Django {}
 impl Django {
     fn set_django_env() {
         let src = Poetry::ensure_get_src_dir();
-        env::set_var("DJANGO_SETTINGS_MODULE", format!("{}/settings", src));
-        env::set_var("DJANGO_LOCAL", "1")
+        utils::set_env("DJANGO_SETTINGS_MODULE", format!("{}.settings", src));
+        utils::set_env("DJANGO_LOCAL", "1")
     }
 
     /// 实际执行的命令为:

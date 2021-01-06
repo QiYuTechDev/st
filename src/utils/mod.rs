@@ -49,3 +49,12 @@ pub fn check_current_dir_file_exists(file: &str) -> bool {
         }
     };
 }
+
+/// 设置环境
+pub fn set_env<S>(key: &str, v: S)
+where
+    S: ToString,
+{
+    println!("set env: {}={}", key, v.to_string());
+    std::env::set_var(key, v.to_string())
+}
