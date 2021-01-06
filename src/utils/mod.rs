@@ -13,6 +13,14 @@ pub fn get_exec_path(name: &str) -> PathBuf {
     }
 }
 
+/// 检测 指定的 可执行文件是否存在
+pub fn check_exe_exists(name: &str) -> bool {
+    match which::which(name) {
+        Ok(_) => true,
+        Err(_) => false,
+    }
+}
+
 /// 使用 args 运行 bin
 ///
 /// fix: 使用这个运行有可能暴露 token 出来

@@ -15,10 +15,15 @@ impl Poetry {
             return false;
         }
 
-        if Self::get_poetry_config().is_some() {
-            return true;
+        if Self::get_poetry_config().is_none() {
+            return false;
         }
-        false
+
+        if !utils::check_exe_exists("poetry") {
+            return false;
+        }
+
+        true
     }
 
     /// 保证获取到 代码 目录
@@ -180,6 +185,21 @@ impl StTrait for Poetry {
             "run".to_string(),
             "pytest".to_string(),
             Self::ensure_get_src_dir(),
+        ]);
+    }
+
+    fn support_lock(&self) -> bool {
+        Self::check_poetry_project()
+    }
+
+    fn do_lock(&self) {
+        Self::poetry_run(vec![
+            "export".to_string(),
+            "--without-hashes".to_string(),
+            "-f".to_string(),
+            "requirements.txt".to_string(),
+            "-o".to_string(),
+            "requirements.txt".to_string(),
         ]);
     }
 }
