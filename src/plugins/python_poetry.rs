@@ -202,4 +202,12 @@ impl StTrait for Poetry {
             "requirements.txt".to_string(),
         ]);
     }
+
+    fn support_publish(&self) -> bool {
+        Self::check_poetry_project()
+    }
+
+    fn do_publish(&self) {
+        Self::poetry_run(vec!["publish".to_string()]);
+    }
 }
