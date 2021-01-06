@@ -12,7 +12,7 @@ impl Django {
     fn set_django_env() {
         let src = Poetry::ensure_get_src_dir();
         utils::set_env("DJANGO_SETTINGS_MODULE", format!("{}.settings", src));
-        utils::set_env("DJANGO_LOCAL", "1")
+        utils::set_env("DJANGO_DEV", "1")
     }
 
     /// 实际执行的命令为:
