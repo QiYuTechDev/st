@@ -16,14 +16,18 @@ impl Django {
 
     /// 实际执行的命令为:
     ///
-    /// poetry run django-admin ...args
+    /// poetry run python manage.py ...args
     fn poetry_django_admin_run(args: Vec<String>) {
         Self::set_django_env(); // 设置必要的环境变量
 
         let cur_dir = env::current_dir().expect("获取当前目录失败");
 
         let full_args = {
-            let mut t = vec!["run".to_string(), "django-admin".to_string()];
+            let mut t = vec![
+                "run".to_string(),
+                "python".to_string(),
+                "manage.py".to_string(),
+            ];
             args.into_iter().for_each(|s| t.push(s));
             t
         };

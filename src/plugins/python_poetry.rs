@@ -86,7 +86,7 @@ impl Poetry {
     pub fn check_poetry_tools_exists(name: &str) -> bool {
         if !Self::poetry_run(vec![
             "run".to_string(),
-            "which".to_string(),
+            "test".to_string(),
             name.to_string(),
         ]) {
             println!("{} 不存在, 请先安装", name);
