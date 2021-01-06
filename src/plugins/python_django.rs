@@ -50,7 +50,9 @@ impl Django {
         let wsgi_file = {
             let src_dir = Poetry::ensure_get_src_dir();
             let mut cur_dir = env::current_dir().expect("获取当前工作目录失败");
-            cur_dir.push(src_dir.clone()).push(src_dir).push("wsgi.py");
+            cur_dir.push(src_dir.clone());
+            cur_dir.push(src_dir);
+            cur_dir.push("wsgi.py");
             cur_dir
         };
         wsgi_file.exists()
