@@ -21,7 +21,20 @@ impl Poetry {
         false
     }
 
+    /// 保证获取到 代码 目录
+    /// 否则直接退出
+    ///
+    /// 返回的是目录名
+    pub fn ensure_get_src_dir() -> String {
+        Self::get_src_dir().expect("获取代码目录失败")
+    }
+
     /// 获取源代码的目录
+    ///
+    /// 返回的是目录名
+    /// 例如:
+    ///     django_div_node
+    ///
     pub fn get_src_dir() -> Option<String> {
         let name = Self::get_poetry_config().map(|v| -> Option<String> {
             if let Some(name) = v.get("name") {
@@ -33,6 +46,7 @@ impl Poetry {
         });
 
         if let Some(Some(dir)) = name {
+            // Python 包 不允许使用 '-' 需要用 '_' 替换
             return Some(dir.replace("-", "_"));
         }
         None
@@ -112,7 +126,7 @@ impl StTrait for Poetry {
         Self::poetry_run(vec![
             "run".to_string(),
             "black".to_string(),
-            Self::get_src_dir().expect("获取源码目录失败"),
+            Self::ensure_get_src_dir(),
         ]);
     }
 
@@ -149,7 +163,7 @@ impl StTrait for Poetry {
         Self::poetry_run(vec![
             "run".to_string(),
             "pylama".to_string(),
-            Self::get_src_dir().expect("获取源代码目录失败"),
+            Self::ensure_get_src_dir(),
         ]);
     }
 
@@ -165,7 +179,7 @@ impl StTrait for Poetry {
         Self::poetry_run(vec![
             "run".to_string(),
             "pytest".to_string(),
-            Self::get_src_dir().expect("获取源码目录失败"),
+            Self::ensure_get_src_dir(),
         ]);
     }
 }

@@ -1,6 +1,7 @@
+use std::env;
+
 use super::Poetry;
 use crate::public::StTrait;
-
 
 /// Python Django Build Runner
 #[derive(Default)]
@@ -8,14 +9,18 @@ pub struct Django {}
 
 impl Django {
     fn set_django_env() {
-        let src = Poetry::get_src_dir().expect("获取源代码目录失败");
-        std::env::set_var("DJANGO_SETTINGS_MODULE", format!("{}.wsgi", src));
+        let src = Poetry::ensure_get_src_dir();
+        env::set_var("DJANGO_SETTINGS_MODULE", format!("{}.wsgi", src));
+        env::set_var("DJANGO_LOCAL", "1")
     }
 
+    /// 实际执行的命令为:
+    ///
+    /// poetry run django-admin ...args
     fn poetry_django_admin_run(args: Vec<String>) {
-        Self::set_django_env();
+        Self::set_django_env(); // 设置必要的环境变量
 
-        let cur_dir = std::env::current_dir().expect("获取当前目录失败");
+        let cur_dir = env::current_dir().expect("获取当前目录失败");
 
         let full_args = {
             let mut t = vec!["run".to_string(), "django-admin".to_string()];
@@ -23,21 +28,32 @@ impl Django {
             t
         };
 
-        let django_dir = {
-            let src_dir = Poetry::get_src_dir().expect("获取源代码目录失败");
-            cur_dir.join(src_dir)
-        };
-        std::env::set_current_dir(django_dir).expect("设置工作目录失败");
+        let django_dir = cur_dir.join(Poetry::ensure_get_src_dir());
+        env::set_current_dir(django_dir).expect("设置工作目录失败");
         Poetry::poetry_run(full_args);
-        std::env::set_current_dir(cur_dir).expect("还原工作目录失败");
+        env::set_current_dir(cur_dir).expect("还原工作目录失败");
     }
 
+    /// 检测是否为 django 的项目
     fn check_django_project() -> bool {
         if !Poetry::check_poetry_project() {
             return false;
         }
 
-        Poetry::check_poetry_tools_exists("django-admin")
+        // 检测 django-admin 是否存在
+        if !Poetry::check_poetry_tools_exists("django-admin") {
+            return false;
+        }
+
+        // check if `repo_name`/`repo_name`/wsgi.py
+        // wsgi.py 是否存在
+        let wsgi_file = {
+            let src_dir = Poetry::ensure_get_src_dir();
+            let mut cur_dir = env::current_dir().expect("获取当前工作目录失败");
+            cur_dir.push(src_dir.clone()).push(src_dir).push("wsgi.py");
+            cur_dir
+        };
+        wsgi_file.exists()
     }
 }
 
