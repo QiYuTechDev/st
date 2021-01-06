@@ -34,9 +34,8 @@ impl Django {
         };
 
         let django_dir = cur_dir.join(Poetry::ensure_get_src_dir());
-        env::set_current_dir(django_dir).expect("设置工作目录失败");
-        Poetry::poetry_run(full_args);
-        env::set_current_dir(cur_dir).expect("还原工作目录失败");
+
+        utils::switch_dir_exec(django_dir, move || Poetry::poetry_run(full_args.clone()));
     }
 
     /// 检测是否为 django 的项目

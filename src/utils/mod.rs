@@ -58,3 +58,16 @@ where
     println!("set env: {}={}", key, v.to_string());
     std::env::set_var(key, v.to_string())
 }
+
+/// 切换到 `work_dir` 执行函数
+/// 函数执行完成之后 在切换回来
+pub fn switch_dir_exec<F, R>(work_dir: PathBuf, func: F) -> R
+where
+    F: Fn() -> R,
+{
+    let cur_dir = std::env::current_dir().expect("获取当前目录失败");
+    std::env::set_current_dir(work_dir).expect("设置工作目录失败");
+    let ret = func();
+    std::env::set_current_dir(cur_dir).expect("还原工作目录失败");
+    ret
+}
