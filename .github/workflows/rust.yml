@@ -23,13 +23,13 @@ jobs:
         run: cargo test --verbose
       # upload unix
       - uses: actions/upload-artifact@v2
-        if: strategy != 'windows-latest'
+        if: strategy.os == 'windows-latest'
         with:
           name: ${{ matrix.os }}
           path: target/debug/st
       # upload windows
       - uses: actions/upload-artifact@v2
-        if: strategy == 'windows-latest'
+        if: strategy.os != 'windows-latest'
         with:
           name: ${{ matrix.os }}
           path: target/debug/st.exe
