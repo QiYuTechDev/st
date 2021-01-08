@@ -34,31 +34,49 @@ pub enum StCli {
     /// 代码检测
     ///
     /// Rust 使用 Cargo clippy
+    ///
+    /// Python 使用 pylama
     Lint,
     /// 检测依赖是否有新版
+    ///
+    /// Rust 使用 Cargo
+    ///
+    /// Python 使用 Poetry
     Outdated,
     /// 运行
+    ///
+    /// Rust 使用 cargo run
+    ///
+    /// Python Django 项目使用 django-admin runserver
     Run,
     /// 升级依赖版本
+    ///
+    /// Rust 使用 cargo
+    ///
+    /// Python 使用 Poetry
     Update,
     /// 测试
     ///
     /// Rust 语言使用 cargo test
+    ///
+    /// Python 使用 pytest
     Test,
     /// 同步依赖
     Sync,
     /// 锁定依赖
     ///
     /// 锁定当前的依赖
+    ///
+    /// Python 使用 Poetry
     Lock,
     /// 本地安装
     ///
     /// 本地安装当前的软件
-    /// 当前支持: Rust
+    /// Rust 使用 cargo install --path .
     Install,
     /// 发布
     ///
-    /// 发布到中心仓库
+    /// Python 使用 Poetry 发布到 Pypi
     Publish,
 }
 
