@@ -30,8 +30,6 @@ pub enum StCli {
     /// Python poetry 的项目 [需要安装 black]
     ///
     /// Rust 项目 cargo fmt
-    ///
-    /// npm 项目使用 prettier
     Format,
     /// 代码检测
     ///

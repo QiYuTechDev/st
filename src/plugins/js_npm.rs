@@ -42,18 +42,6 @@ impl StTrait for Npm {
         self.npm_run(vec!["cache".to_string(), "clean".to_string()])
     }
 
-    fn support_format(&self) -> bool {
-        self.check_npm_project()
-    }
-
-    /// 格式化代码
-    /// 使用 `prettier` 工具格式化
-    /// 应该测试 :)
-    /// doc: https://prettier.io/
-    fn do_format(&self) {
-        self.npm_run(vec!["run".to_string(), "prettier".to_string()])
-    }
-
     fn support_outdated(&self) -> bool {
         self.check_npm_project()
     }
