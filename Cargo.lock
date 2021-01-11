@@ -157,8 +157,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "st"
-version = "0.2.2"
+name = "st-cli"
+version = "0.2.3"
 dependencies = [
  "serde",
  "serde_json",
