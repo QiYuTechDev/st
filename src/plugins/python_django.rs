@@ -253,9 +253,10 @@ impl DockerTrait for Django {
         let name = self.get_new_name(env);
 
         let cur_dir = std::env::current_dir().expect("获取当前目录失败");
-        let media_dir = cur_dir.join("media");
-        let logs_dir = cur_dir.join("logs");
         let static_dir = cur_dir.join("static");
+        let media_dir = cur_dir.join("media");
+        let run_dir = cur_dir.join("run");
+        let logs_dir = cur_dir.join("logs");
 
         let args = vec![
             "run".to_string(),
@@ -263,11 +264,13 @@ impl DockerTrait for Django {
             "--network=host".to_string(),
             "--restart=always".to_string(),
             "-v".to_string(),
-            format!("{}:/app/logs", logs_dir.to_str().unwrap()),
+            format!("{}:/app/static", static_dir.to_str().unwrap()),
             "-v".to_string(),
             format!("{}:/app/media", media_dir.to_str().unwrap()),
             "-v".to_string(),
-            format!("{}:/app/static", static_dir.to_str().unwrap()),
+            format!("{}:/app/run", run_dir.to_str().unwrap()),
+            "-v".to_string(),
+            format!("{}:/app/logs", logs_dir.to_str().unwrap()),
             format!("--name={}", name),
             tag,
         ];
