@@ -91,5 +91,5 @@ pub trait StTrait {
         false
     }
 
-    fn do_docker(&self, _: &docker::Docker) {}
+    fn do_docker(&self, _: &docker::DockerCmd) {}
 }

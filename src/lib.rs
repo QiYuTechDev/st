@@ -83,7 +83,7 @@ pub enum StCli {
     /// 提升版本
     Bump(public::bump::Bump),
     /// docker 命令
-    Docker(public::docker::Docker),
+    Docker(public::docker::DockerCmd),
 }
 
 impl StCli {

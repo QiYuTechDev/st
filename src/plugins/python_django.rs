@@ -2,7 +2,7 @@ use std::env;
 
 use super::Poetry;
 use crate::public::bump::{Bump, VerNewOld, Version};
-use crate::public::docker::Docker;
+use crate::public::docker::{DockerCmd, DockerEnv, DockerTrait};
 use crate::public::StTrait;
 use crate::utils;
 
@@ -62,6 +62,30 @@ impl Django {
             cur_dir
         };
         wsgi_file.exists()
+    }
+
+    fn load_version() -> Version {
+        let s = std::fs::read_to_string("version.json").expect("读取 version 版本失败");
+        serde_json::from_str(s.as_str()).expect("解析 version.json 失败")
+    }
+
+    fn get_docker_tag(&self, env: &DockerEnv, old: bool) -> String {
+        let version = Self::load_version();
+        let project_name = Poetry::ensure_get_src_dir();
+        let tag = if old {
+            match env {
+                DockerEnv::Dev => version.dev.old,
+                DockerEnv::Test => version.test.old,
+                DockerEnv::Prod => version.prod.old,
+            }
+        } else {
+            match env {
+                DockerEnv::Dev => version.dev.new,
+                DockerEnv::Test => version.test.new,
+                DockerEnv::Prod => version.prod.new,
+            }
+        };
+        format!("{}_{}_{}", project_name, env.to_string(), tag)
     }
 }
 
@@ -168,35 +192,110 @@ impl StTrait for Django {
         true
     }
 
-    fn do_docker(&self, env: &Docker) {
-        let version: Version = {
-            let s = std::fs::read_to_string("version.json").expect("读取 version 版本失败");
-            serde_json::from_str(s.as_str()).expect("解析 version.json 失败")
+    fn do_docker(&self, env: &DockerCmd) {
+        let ptr = self as &dyn DockerTrait;
+        match env {
+            DockerCmd::Build(env) => {
+                if ptr.can_build(env) {
+                    ptr.do_build(env)
+                }
+            }
+            DockerCmd::Run(env) => {
+                if ptr.can_run(env) {
+                    ptr.do_run(env)
+                }
+            }
+            DockerCmd::Stop(env) => {
+                if ptr.can_stop(env) {
+                    ptr.do_stop(env)
+                }
+            }
+            DockerCmd::Restart(env) => {
+                if ptr.can_restart(env) {
+                    ptr.do_restart(env)
+                }
+            }
+            DockerCmd::Upgrade(env) => {
+                if ptr.can_upgrade(env) {
+                    ptr.do_upgrade(env)
+                }
+            }
+        }
+    }
+}
+
+impl DockerTrait for Django {
+    fn can_build(&self, env: &DockerEnv) -> bool {
+        let docker_file = {
+            let cur_dir = std::env::current_dir().expect("获取当前目录失败");
+            let docker_file = self.get_docker_file(env);
+            cur_dir.join(docker_file)
         };
 
-        let project_name = Poetry::ensure_get_src_dir();
+        docker_file.exists()
+    }
 
-        let (docker_tag, docker_file) = {
-            let (tag, file) = match env {
-                Docker::Dev => (version.dev.new, "dev"),
-                Docker::Test => (version.test.new, "test"),
-                Docker::Prod => (version.prod.new, "prod"),
-            };
-            (
-                format!("{}_{}", project_name, tag),
-                format!("docker/{}.Dockerfile", file),
-            )
-        };
-
-        let docker = utils::get_exec_path("docker");
+    fn do_build(&self, env: &DockerEnv) {
+        let docker_file = self.get_docker_file(env);
         let args = vec![
             "build".to_string(),
             "-f".to_string(),
             docker_file,
-            ".".to_string(),
             "-t".to_string(),
-            docker_tag,
+            self.get_new_tag(env),
         ];
-        utils::run_with_args(docker, args);
+        utils::docker::run(args);
+    }
+
+    fn can_run(&self, _env: &DockerEnv) -> bool {
+        true
+    }
+
+    fn do_run(&self, env: &DockerEnv) {
+        let tag = self.get_new_tag(env);
+        let args = vec![
+            "run".to_string(),
+            "-d".to_string(),
+            "--network=host".to_string(),
+            "--restart=always".to_string(),
+            "-v".to_string(),
+            "`pwd`/logs:/app/logs".to_string(),
+            "-v".to_string(),
+            "`pwd`/media:/app/media".to_string(),
+            format!("--name={}", tag),
+            tag,
+        ];
+        utils::docker::run(args);
+    }
+
+    fn can_stop(&self, _env: &DockerEnv) -> bool {
+        true
+    }
+
+    fn do_stop(&self, env: &DockerEnv) {
+        let tag = self.get_new_tag(env);
+        let args = vec!["stop".to_string(), tag];
+        utils::docker::run(args);
+    }
+
+    fn can_upgrade(&self, _env: &DockerEnv) -> bool {
+        unimplemented!()
+    }
+
+    fn do_upgrade(&self, _env: &DockerEnv) {
+        unimplemented!()
+    }
+
+    fn get_new_tag(&self, env: &DockerEnv) -> String {
+        self.get_docker_tag(env, false)
+    }
+
+    fn get_old_tag(&self, env: &DockerEnv) -> String {
+        self.get_docker_tag(env, true)
+    }
+
+    fn get_docker_file(&self, env: &DockerEnv) -> String {
+        let s = env.to_string();
+        format!("docker/{}.Dockerfile", s)
     }
 }
