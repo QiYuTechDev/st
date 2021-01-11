@@ -278,14 +278,6 @@ impl DockerTrait for Django {
         utils::docker::run(args);
     }
 
-    fn can_upgrade(&self, _env: &DockerEnv) -> bool {
-        unimplemented!()
-    }
-
-    fn do_upgrade(&self, _env: &DockerEnv) {
-        unimplemented!()
-    }
-
     fn get_new_tag(&self, env: &DockerEnv) -> String {
         self.get_docker_tag(env, false)
     }
