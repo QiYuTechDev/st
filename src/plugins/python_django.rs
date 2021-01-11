@@ -262,6 +262,8 @@ impl DockerTrait for Django {
             "`pwd`/logs:/app/logs".to_string(),
             "-v".to_string(),
             "`pwd`/media:/app/media".to_string(),
+            "-v".to_string(),
+            "`pwd`/static:/app/static".to_string(),
             format!("--name={}", tag),
             tag,
         ];
