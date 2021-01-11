@@ -239,6 +239,7 @@ impl DockerTrait for Django {
             docker_file,
             "-t".to_string(),
             self.get_new_tag(env),
+            ".".to_string(),
         ];
         utils::docker::run(args);
     }
