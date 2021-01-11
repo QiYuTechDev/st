@@ -1,5 +1,5 @@
 use crate::plugins::{Cargo, Django, Npm, Poetry};
-use crate::public::{Bump, StTrait};
+use crate::public::{self, StTrait};
 
 /// 运行 `build` 命令
 pub fn run_build_cmd() {
@@ -50,8 +50,12 @@ pub fn run_publish_cmd() {
     do_run_all_cmd(|p| p.support_publish(), |p| p.do_publish())
 }
 
-pub fn run_bump_cmd(bump: &Bump) {
+pub fn run_bump_cmd(bump: &public::bump::Bump) {
     do_run_all_cmd(|p| p.support_bump(), |p| p.do_bump(bump))
+}
+
+pub fn run_docker_cmd(docker: &public::docker::Docker) {
+    do_run_all_cmd(|p| p.support_docker(), |p| p.do_docker(docker))
 }
 
 fn do_run_all_cmd<P, R>(check_fn: P, do_fn: R)

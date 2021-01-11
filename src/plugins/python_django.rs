@@ -1,7 +1,8 @@
 use std::env;
 
 use super::Poetry;
-use crate::public::{Bump, StTrait, VerNewOld, Version};
+use crate::public::bump::{Bump, VerNewOld, Version};
+use crate::public::StTrait;
 use crate::utils;
 
 /// Python Django Build Runner

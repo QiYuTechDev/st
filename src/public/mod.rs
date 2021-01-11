@@ -1,6 +1,5 @@
-mod bump;
-
-pub use bump::{Bump, VerNewOld, Version};
+pub mod bump;
+pub mod docker;
 
 /// st tools 支持
 pub trait StTrait {
@@ -85,5 +84,12 @@ pub trait StTrait {
         false
     }
 
-    fn do_bump(&self, _bump: &Bump) {}
+    fn do_bump(&self, _: &bump::Bump) {}
+
+    /// 是否支持 构造 docker 镜像
+    fn support_docker(&self) -> bool {
+        false
+    }
+
+    fn do_docker(&self, _: &docker::Docker) {}
 }
