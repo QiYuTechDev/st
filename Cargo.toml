@@ -4,7 +4,7 @@ version = "0.2.1"
 authors = ["dev <dev@qiyutech.tech>"]
 edition = "2018"
 description = "Dev Super Tools! auto format & lint and more"
-license-file = "LICENSE"
+license = "AGPL"
 homepage = "https://github.com/QiYuTechDev/st"
 
 [[bin]]
