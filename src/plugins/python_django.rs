@@ -96,19 +96,23 @@ impl StTrait for Django {
     fn do_bump(&self, bump: &Bump) {
         let version_file = "version.json";
 
-        let v = std::fs::read_to_string(version_file).expect("version.json 文件不存在");
-
-        let old = match serde_json::from_str(v.as_str()) {
-            Ok(v) => v,
-            Err(e) => {
-                eprintln!("解析 {} 失败: {}, 使用默认值", version_file, e);
-                Version::default()
+        let old = {
+            // read old version
+            let v = std::fs::read_to_string(version_file).expect("version.json 文件不存在");
+            match serde_json::from_str(v.as_str()) {
+                Ok(v) => v,
+                Err(e) => {
+                    eprintln!("解析 {} 失败: {}, 使用默认值", version_file, e);
+                    Version::default()
+                }
             }
         };
 
+        // parse new version
         let new_version =
             Poetry::get_poetry_project_version().expect("从 pyproject.toml 获取 新版本失败");
 
+        // set new version
         let new = match bump {
             Bump::Dev => Version {
                 dev: VerNewOld {
@@ -132,7 +136,10 @@ impl StTrait for Django {
                 ..old
             },
         };
-        let s = serde_json::to_string(&new).expect("序列化新版本信息失败");
-        std::fs::write(version_file, s).expect("写入新版本失败");
+        // write to disk
+        {
+            let s = serde_json::to_string_pretty(&new).expect("序列化新版本信息失败");
+            std::fs::write(version_file, s).expect("写入新版本失败");
+        };
     }
 }
