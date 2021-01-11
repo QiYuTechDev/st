@@ -1,10 +1,10 @@
 [package]
 name = "st-cli"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["dev <dev@qiyutech.tech>"]
 edition = "2018"
 description = "Dev Super Tools! auto format & lint and more"
-license = "AGPL"
+license-file = "LICENSE"
 homepage = "https://github.com/QiYuTechDev/st"
 
 [[bin]]
