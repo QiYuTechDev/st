@@ -1,8 +1,11 @@
 [package]
 name = "st"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["dev <dev@qiyutech.tech>"]
 edition = "2018"
+description = "Dev Super Tools! auto format & lint and more"
+license-file = "LICENSE"
+homepage = "https://github.com/QiYuTechDev/st"
 
 [[bin]]
 name = "st"
