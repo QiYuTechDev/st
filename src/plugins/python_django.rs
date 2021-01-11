@@ -80,7 +80,7 @@ impl Django {
                 DockerEnv::Prod => version.prod.new,
             }
         };
-        format!("{}_{}_{}", project_name, env.to_string(), tag)
+        format!("{}_{}:{}", project_name, env.to_string(), tag)
     }
 }
 
