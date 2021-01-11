@@ -57,6 +57,16 @@ impl Poetry {
         None
     }
 
+    pub fn get_poetry_project_version() -> Option<String> {
+        let config = Self::get_poetry_config()?;
+        if !config.is_table() {
+            return None;
+        }
+
+        let version = config.get("version")?;
+        version.as_str().map(String::from)
+    }
+
     /// 获取 poetry 的配置
     pub fn get_poetry_config() -> Option<toml::Value> {
         let f = "pyproject.toml";

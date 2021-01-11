@@ -5,6 +5,8 @@ pub(crate) mod public;
 pub(crate) mod run_cmd;
 pub(crate) mod utils;
 
+use public::Bump;
+
 #[derive(Debug, StructOpt)]
 #[structopt(name = "st")]
 pub enum StCli {
@@ -78,6 +80,8 @@ pub enum StCli {
     ///
     /// Python 使用 Poetry 发布到 Pypi
     Publish,
+    /// 提升版本
+    Bump(Bump),
 }
 
 impl StCli {
@@ -95,6 +99,7 @@ impl StCli {
             StCli::Lock => run_cmd::run_lock_cmd(),
             StCli::Install => run_cmd::run_install_cmd(),
             StCli::Publish => run_cmd::run_publish_cmd(),
+            StCli::Bump(bump) => run_cmd::run_bump_cmd(bump),
         }
     }
 }

@@ -1,3 +1,7 @@
+mod bump;
+
+pub use bump::{Bump, VerNewOld, Version};
+
 /// st tools 支持
 pub trait StTrait {
     /// 名称
@@ -75,4 +79,11 @@ pub trait StTrait {
         false
     }
     fn do_install(&self) {}
+
+    /// 是否支持提升版本
+    fn support_bump(&self) -> bool {
+        false
+    }
+
+    fn do_bump(&self, _bump: &Bump) {}
 }
