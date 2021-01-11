@@ -2,6 +2,7 @@ use std::env;
 
 use super::Poetry;
 use crate::public::bump::{Bump, VerNewOld, Version};
+use crate::public::docker::Docker;
 use crate::public::StTrait;
 use crate::utils;
 
@@ -143,5 +144,59 @@ impl StTrait for Django {
             let s = serde_json::to_string_pretty(&new).expect("序列化新版本信息失败");
             std::fs::write(version_file, s).expect("写入新版本失败");
         };
+    }
+
+    fn support_docker(&self) -> bool {
+        if !Self::check_django_project() {
+            return false;
+        }
+        // 检查 docker 文件夹是否存在
+        let docker_dir = std::path::Path::new("docker");
+        if !docker_dir.exists() {
+            return false;
+        }
+
+        let buf = docker_dir.to_path_buf();
+        let dev = buf.join("dev.Dockerfile");
+        let test = buf.join("test.Dockerfile");
+        let prod = buf.join("prod.Dockerfile");
+        if !dev.exists() || !test.exists() || !prod.exists() {
+            eprintln!("dev test prod docker file not all exists");
+            return false;
+        }
+
+        true
+    }
+
+    fn do_docker(&self, env: &Docker) {
+        let version: Version = {
+            let s = std::fs::read_to_string("version.json").expect("读取 version 版本失败");
+            serde_json::from_str(s.as_str()).expect("解析 version.json 失败")
+        };
+
+        let project_name = Poetry::ensure_get_src_dir();
+
+        let (docker_tag, docker_file) = {
+            let (tag, file) = match env {
+                Docker::Dev => (version.dev.new, "dev"),
+                Docker::Test => (version.test.new, "test"),
+                Docker::Prod => (version.prod.new, "prod"),
+            };
+            (
+                format!("{}_{}", project_name, tag),
+                format!("docker/{}.Dockerfile", file),
+            )
+        };
+
+        let docker = utils::get_exec_path("docker");
+        let args = vec![
+            "build".to_string(),
+            "-f".to_string(),
+            docker_file,
+            ".".to_string(),
+            "-t".to_string(),
+            docker_tag,
+        ];
+        utils::run_with_args(docker, args);
     }
 }
