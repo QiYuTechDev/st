@@ -46,11 +46,6 @@ impl Django {
             return false;
         }
 
-        // 检测 django-admin 是否存在
-        if !Poetry::check_poetry_tools_exists("django-admin") {
-            return false;
-        }
-
         // check if `repo_name`/`repo_name`/wsgi.py
         // wsgi.py 是否存在
         let wsgi_file = {
@@ -175,12 +170,13 @@ impl StTrait for Django {
             return false;
         }
         // 检查 docker 文件夹是否存在
-        let docker_dir = std::path::Path::new("docker");
+        let docker_dir = std::env::current_dir().unwrap().join("docker");
         if !docker_dir.exists() {
+            eprintln!("docker directory not exists");
             return false;
         }
 
-        let buf = docker_dir.to_path_buf();
+        let buf = docker_dir.clone();
         let dev = buf.join("dev.Dockerfile");
         let test = buf.join("test.Dockerfile");
         let prod = buf.join("prod.Dockerfile");
