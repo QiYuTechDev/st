@@ -176,7 +176,7 @@ impl StTrait for Django {
             return false;
         }
 
-        let buf = docker_dir.clone();
+        let buf = docker_dir;
         let dev = buf.join("dev.Dockerfile");
         let test = buf.join("test.Dockerfile");
         let prod = buf.join("prod.Dockerfile");
@@ -250,6 +250,7 @@ impl DockerTrait for Django {
 
     fn do_run(&self, env: &DockerEnv) {
         let tag = self.get_new_tag(env);
+        let name = self.get_new_name(env);
 
         let cur_dir = std::env::current_dir().expect("获取当前目录失败");
         let media_dir = cur_dir.join("media");
@@ -267,7 +268,7 @@ impl DockerTrait for Django {
             format!("{}:/app/media", media_dir.to_str().unwrap()),
             "-v".to_string(),
             format!("{}:/app/static", static_dir.to_str().unwrap()),
-            format!("--name={}", tag),
+            format!("--name={}", name),
             tag,
         ];
         utils::docker::run(args);
@@ -278,7 +279,7 @@ impl DockerTrait for Django {
     }
 
     fn do_stop(&self, env: &DockerEnv) {
-        let tag = self.get_new_tag(env);
+        let tag = self.get_new_name(env);
         let args = vec!["stop".to_string(), tag];
         utils::docker::run(args);
     }

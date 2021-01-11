@@ -72,6 +72,18 @@ pub trait DockerTrait {
 
     /// 获取 docker 文件名称 docker build 的时候需要
     fn get_docker_file(&self, env: &DockerEnv) -> String;
+
+    /// 获取 docker 新版运行的名字
+    fn get_new_name(&self, env: &DockerEnv) -> String {
+        let tag = self.get_new_tag(env);
+        tag.replace(":", "_")
+    }
+
+    /// 获取 docker 老版运行的名字
+    fn get_old_name(&self, env: &DockerEnv) -> String {
+        let tag = self.get_old_tag(env);
+        tag.replace(":", "_")
+    }
 }
 
 impl ToString for DockerEnv {
