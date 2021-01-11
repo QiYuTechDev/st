@@ -1,4 +1,4 @@
-name: Publish To Rust Crates
+name: Publish
 
 on:
   release:

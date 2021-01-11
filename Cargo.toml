@@ -1,6 +1,6 @@
 [package]
 name = "st"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["dev <dev@qiyutech.tech>"]
 edition = "2018"
 description = "Dev Super Tools! auto format & lint and more"
