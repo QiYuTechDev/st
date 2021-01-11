@@ -93,6 +93,7 @@ impl StTrait for Django {
         Self::check_django_project()
     }
 
+    /// 版本升级 dev,test and prod
     fn do_bump(&self, bump: &Bump) {
         let version_file = "version.json";
 
