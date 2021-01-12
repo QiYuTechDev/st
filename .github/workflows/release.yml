@@ -17,22 +17,24 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ macos-latest, windows-latest, ubuntu-latest ]
+        os: [ macos-latest, windows-2019, ubuntu-latest ]
     steps:
       - uses: actions/checkout@v2
       - name: Rust Version
         run: rustc --version
       - name: Build
         run: cargo build --release --verbose
+
       # upload unix
       - uses: actions/upload-artifact@v2
         if: strategy.os != 'windows-latest'
         with:
           name: ${{ matrix.os }}
           path: target/release/st
+
       # upload windows
       - uses: actions/upload-artifact@v2
-        if: strategy.os == 'windows-latest'
+        if: strategy.os == 'windows-2019'
         with:
           name: ${{ matrix.os }}
           path: target/release/st.exe
