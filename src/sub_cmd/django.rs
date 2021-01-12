@@ -21,6 +21,11 @@ impl DjangoSubCmd {
             return;
         }
 
+        // attention:
+        // it will auto switch working directory
+        //
+        //     poetry run python manage.py collectstatic
+        //
         let args = vec!["collectstatic".to_string()];
         Django::poetry_django_admin_run(args);
     }
