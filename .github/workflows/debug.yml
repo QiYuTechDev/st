@@ -1,4 +1,4 @@
-name: Rust
+name: Debug Build
 
 on:
   push:
@@ -17,19 +17,9 @@ jobs:
         os: [ macos-latest, windows-latest, ubuntu-latest ]
     steps:
       - uses: actions/checkout@v2
+      - name: Rust Version
+        run: rustc --version
       - name: Build
         run: cargo build --verbose
       - name: Run tests
         run: cargo test --verbose
-      # upload unix
-      - uses: actions/upload-artifact@v2
-        if: strategy.os == 'windows-latest'
-        with:
-          name: ${{ matrix.os }}
-          path: target/debug/st
-      # upload windows
-      - uses: actions/upload-artifact@v2
-        if: strategy.os != 'windows-latest'
-        with:
-          name: ${{ matrix.os }}
-          path: target/debug/st.exe

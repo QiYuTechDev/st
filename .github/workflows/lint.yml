@@ -1,4 +1,4 @@
-name: Lint
+name: Rust Lint
 
 on:
   push:
@@ -20,4 +20,4 @@ jobs:
       - name: Rust Version
         run: rustc --version
       - name: Lint
-        run: cargo clippy
+        run: cargo clippy --verbose
