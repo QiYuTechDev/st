@@ -1,17 +1,29 @@
 use structopt::StructOpt;
 
+use crate::plugins::{Django, Poetry};
 use crate::public::RunTrait;
 
 /// Django 子命令
+///
+/// 基于 Django 的软件
 #[derive(Debug, StructOpt)]
 #[structopt(name = "django")]
 pub enum DjangoSubCmd {
-    /// 收集静态文件
+    /// 收集静态文件 为部署做准备
     CollectStatic,
 }
 
 impl DjangoSubCmd {
-    fn do_collect_static(&self) {}
+    /// 收集静态文件
+    fn do_collect_static(&self) {
+        if Django::check_django_project() == false {
+            eprintln!("当前不是 Django 项目, 无法执行");
+            return;
+        }
+
+        let args = vec!["collectstatic".to_string()];
+        Django::poetry_django_admin_run(args);
+    }
 }
 
 impl RunTrait for DjangoSubCmd {

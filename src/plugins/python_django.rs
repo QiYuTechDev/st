@@ -20,7 +20,7 @@ impl Django {
     /// 实际执行的命令为:
     ///
     /// poetry run python manage.py ...args
-    fn poetry_django_admin_run(args: Vec<String>) {
+    pub fn poetry_django_admin_run(args: Vec<String>) {
         Self::set_django_env(); // 设置必要的环境变量
 
         let cur_dir = env::current_dir().expect("获取当前目录失败");
@@ -41,7 +41,7 @@ impl Django {
     }
 
     /// 检测是否为 django 的项目
-    fn check_django_project() -> bool {
+    pub fn check_django_project() -> bool {
         if !Poetry::check_poetry_project() {
             return false;
         }
