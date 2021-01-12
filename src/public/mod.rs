@@ -1,6 +1,12 @@
 pub mod bump;
 pub mod docker;
 
+/// 可扩展的第三方 子命令
+pub trait RunTrait {
+    /// 运行 命令
+    fn run(&self);
+}
+
 /// st tools 支持
 pub trait StTrait {
     /// 名称
