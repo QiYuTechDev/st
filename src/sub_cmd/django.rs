@@ -1,6 +1,6 @@
 use structopt::StructOpt;
 
-use crate::plugins::{Django, Poetry};
+use crate::plugins::Django;
 use crate::public::RunTrait;
 
 /// Django 子命令
@@ -16,7 +16,7 @@ pub enum DjangoSubCmd {
 impl DjangoSubCmd {
     /// 收集静态文件
     fn do_collect_static(&self) {
-        if Django::check_django_project() == false {
+        if !Django::check_django_project() {
             eprintln!("当前不是 Django 项目, 无法执行");
             return;
         }
