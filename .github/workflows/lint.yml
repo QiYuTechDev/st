@@ -20,4 +20,4 @@ jobs:
       - name: Rust Version
         run: rustc --version
       - name: Lint
-        run: cargo clippy --verbose
+        run: cargo clippy --verbose  -- -D warnings
