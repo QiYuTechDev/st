@@ -26,13 +26,13 @@ jobs:
         run: cargo build --release --verbose
       # upload unix
       - uses: actions/upload-artifact@v2
-        if: strategy.os == 'windows-latest'
+        if: strategy.os != 'windows-latest'
         with:
           name: ${{ matrix.os }}
           path: target/release/st
       # upload windows
       - uses: actions/upload-artifact@v2
-        if: strategy.os != 'windows-latest'
+        if: strategy.os == 'windows-latest'
         with:
           name: ${{ matrix.os }}
           path: target/release/st.exe
