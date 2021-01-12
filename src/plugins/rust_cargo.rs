@@ -94,6 +94,7 @@ impl StTrait for Cargo {
     fn do_install(&self) {
         self.cargo_run(vec![
             "install".to_string(),
+            "--force".to_string(),
             "--path".to_string(),
             ".".to_string(),
         ])

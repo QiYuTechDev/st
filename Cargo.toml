@@ -1,6 +1,6 @@
 [package]
 name = "st-cli"
-version = "0.3.7"
+version = "0.5.0"
 authors = ["dev <dev@qiyutech.tech>"]
 edition = "2018"
 description = "Dev Super Tools! auto format & lint and more"
