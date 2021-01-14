@@ -2,8 +2,6 @@ use std::env;
 use std::path::PathBuf;
 use std::process;
 
-pub mod docker;
-
 /// 获取 执行 代码的绝对路径
 pub fn get_exec_path(name: &str) -> PathBuf {
     match which::which(name) {

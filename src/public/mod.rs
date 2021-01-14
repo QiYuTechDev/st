@@ -1,5 +1,4 @@
 pub mod bump;
-pub mod docker;
 
 /// 可扩展的第三方 子命令
 pub trait RunTrait {
@@ -91,11 +90,4 @@ pub trait StTrait {
     }
 
     fn do_bump(&self, _: &bump::Bump) {}
-
-    /// 是否支持 构造 docker 镜像
-    fn support_docker(&self) -> bool {
-        false
-    }
-
-    fn do_docker(&self, _: &docker::DockerCmd) {}
 }

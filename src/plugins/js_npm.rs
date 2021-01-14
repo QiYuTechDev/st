@@ -23,15 +23,6 @@ impl StTrait for Npm {
         String::from("npm")
     }
 
-    /// npm 其他工具 有 build
-    /// 例如: webpack 等
-    /// 当前不支持，因为还用不到
-    fn support_build(&self) -> bool {
-        false
-    }
-
-    fn do_build(&self) {}
-
     /// 支持 `clean`
     /// 删除 npm 缓存的 文件
     fn support_clean(&self) -> bool {

@@ -84,8 +84,6 @@ pub enum StCli {
     Publish,
     /// 提升版本
     Bump(public::bump::Bump),
-    /// docker 子命令
-    Docker(public::docker::DockerCmd),
     /// django 子命令
     Django(sub_cmd::DjangoSubCmd),
 }
@@ -106,7 +104,6 @@ impl StCli {
             StCli::Install => run_cmd::run_install_cmd(),
             StCli::Publish => run_cmd::run_publish_cmd(),
             StCli::Bump(bump) => run_cmd::run_bump_cmd(bump),
-            StCli::Docker(d) => run_cmd::run_docker_cmd(d),
             StCli::Django(cmd) => cmd.run(),
         }
     }
