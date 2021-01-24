@@ -36,7 +36,7 @@ impl DjangoSubCmd {
         //
         //     poetry run python manage.py collectstatic
         //
-        Django::poetry_django_admin_run(vec!["collectstatic".to_string()]);
+        Django::poetry_django_admin_prod_run(vec!["collectstatic".to_string()]);
     }
 
     fn do_dump_data(&self) {
@@ -44,7 +44,7 @@ impl DjangoSubCmd {
             eprintln!("当前不是 Django 项目, 无法执行");
             return;
         }
-        Django::poetry_django_admin_run(vec![
+        Django::poetry_django_admin_dev_run(vec![
             "dumpdata".to_string(),
             "--output".to_string(),
             "dump.json".to_string(),
@@ -56,7 +56,7 @@ impl DjangoSubCmd {
             eprintln!("当前不是 Django 项目, 无法执行");
             return;
         }
-        Django::poetry_django_admin_run(vec!["loaddata".to_string(), "dump.json".to_string()]);
+        Django::poetry_django_admin_dev_run(vec!["loaddata".to_string(), "dump.json".to_string()]);
     }
 }
 

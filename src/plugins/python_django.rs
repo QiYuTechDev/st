@@ -10,18 +10,30 @@ use crate::utils;
 pub struct Django {}
 
 impl Django {
-    fn set_django_env() {
+    fn set_django_env(prod: bool) {
         let src = Poetry::ensure_get_src_dir();
         utils::set_env("DJANGO_SETTINGS_MODULE", format!("{}.settings", src));
-        utils::set_env("DJANGO_DEV", "1")
+        if prod {
+            utils::set_env("DJANGO_PROD", "1");
+        } else {
+            utils::set_env("DJANGO_DEV", "1");
+        }
+    }
+
+    pub fn poetry_django_admin_prod_run(args: Vec<String>) {
+        Self::set_django_env(true); // 设置必要的环境变量
+        Self::do_poetry_django_admin_run(args);
     }
 
     /// 实际执行的命令为:
     ///
     /// poetry run python manage.py ...args
-    pub fn poetry_django_admin_run(args: Vec<String>) {
-        Self::set_django_env(); // 设置必要的环境变量
+    pub fn poetry_django_admin_dev_run(args: Vec<String>) {
+        Self::set_django_env(false); // 设置必要的环境变量
+        Self::do_poetry_django_admin_run(args);
+    }
 
+    fn do_poetry_django_admin_run(args: Vec<String>) {
         let cur_dir = env::current_dir().expect("获取当前目录失败");
 
         let full_args = {
@@ -70,11 +82,11 @@ impl StTrait for Django {
 
     fn do_run(&self) {
         println!("django start make migrations ...");
-        Self::poetry_django_admin_run(vec!["makemigrations".to_string()]);
+        Self::poetry_django_admin_dev_run(vec!["makemigrations".to_string()]);
         println!("django start migrate ...");
-        Self::poetry_django_admin_run(vec!["migrate".to_string()]);
+        Self::poetry_django_admin_dev_run(vec!["migrate".to_string()]);
         println!("django start run server ...");
-        Self::poetry_django_admin_run(vec!["runserver".to_string()]);
+        Self::poetry_django_admin_dev_run(vec!["runserver".to_string()]);
     }
 
     fn support_lint(&self) -> bool {
@@ -82,7 +94,7 @@ impl StTrait for Django {
     }
 
     fn do_lint(&self) {
-        Self::poetry_django_admin_run(vec!["check".to_string()])
+        Self::poetry_django_admin_dev_run(vec!["check".to_string()])
     }
 
     fn support_bump(&self) -> bool {
