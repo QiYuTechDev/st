@@ -59,7 +59,7 @@ impl DjangoSubCmd {
             "-e".to_string(),
             "admin".to_string(),
             "--output".to_string(),
-            "dump.jsonl".to_string(), // we do use JSON lines format
+            Self::get_export_filename(),
         ]);
     }
 
@@ -68,7 +68,13 @@ impl DjangoSubCmd {
             eprintln!("当前不是 Django 项目, 无法执行");
             return;
         }
-        Django::poetry_django_admin_dev_run(vec!["loaddata".to_string(), "dump.json".to_string()]);
+        Django::poetry_django_admin_dev_run(vec!["loaddata".to_string(), Self::get_export_filename()]);
+    }
+
+    /// 导出、导入文件名称
+    /// 使用 JSON lines 格式
+    fn get_export_filename() -> String {
+        String::from("dump.jsonl")
     }
 }
 

@@ -1,9 +1,9 @@
 [package]
 name = "st-cli"
-version = "0.6.1"
+version = "0.6.2"
 authors = ["dev <dev@qiyutech.tech>"]
 edition = "2018"
-description = "Dev Super Tools! auto format & lint and more"
+description = "Dev Super Tools! auto format、 lint and more"
 license-file = "LICENSE"
 homepage = "https://github.com/QiYuTechDev/st"
 
