@@ -73,8 +73,11 @@ impl DjangoSubCmd {
 
     /// 导出、导入文件名称
     /// 使用 JSON lines 格式
+    /// https://docs.djangoproject.com/en/dev/topics/serialization/#serialization-formats
+    /// todo Django 3.2 才支持 JSON Lines
     fn get_export_filename() -> String {
-        String::from("dump.jsonl")
+        String::from("dump.json")
+        // String::from("dump.jsonl")
     }
 }
 
