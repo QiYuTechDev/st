@@ -44,10 +44,22 @@ impl DjangoSubCmd {
             eprintln!("当前不是 Django 项目, 无法执行");
             return;
         }
+        // we do should export to json lines
+        // https://stackoverflow.com/questions/853796/problems-with-contenttypes-when-loading-a-fixture-in-django
         Django::poetry_django_admin_dev_run(vec![
             "dumpdata".to_string(),
+            "--natural-foreign".to_string(),
+            "--natural-primary".to_string(),
+            "-e".to_string(),
+            "contenttypes".to_string(),
+            "-e".to_string(),
+            "auth.Permission".to_string(),
+            "-e".to_string(),
+            "sessions".to_string(),
+            "-e".to_string(),
+            "admin".to_string(),
             "--output".to_string(),
-            "dump.json".to_string(),
+            "dump.jsonl".to_string(), // we do use JSON lines format
         ]);
     }
 
