@@ -58,6 +58,10 @@ impl DjangoSubCmd {
             "sessions".to_string(),
             "-e".to_string(),
             "admin".to_string(),
+            // wagtail admin table is indeed not exists
+            // just ignore on export data
+            "-e".to_string(),
+            "wagtailadmin.admin".to_string(),
             "--output".to_string(),
             Self::get_export_filename(),
         ]);
