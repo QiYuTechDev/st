@@ -2,6 +2,7 @@ use structopt::StructOpt;
 
 use crate::plugins::Django;
 use crate::public::RunTrait;
+use crate::utils;
 
 /// Django 子命令
 ///
@@ -10,6 +11,10 @@ use crate::public::RunTrait;
 #[structopt(name = "django")]
 pub enum DjangoSubCmd {
     /// 收集静态文件 为部署做准备
+    ///
+    /// 会设置环境变量
+    /// * DJANGO_COLLECT_STATIC 为 1
+    /// * DJANGO_PROD 为 1
     CollectStatic,
     /// 导出数据库数据
     ///
@@ -30,6 +35,8 @@ impl DjangoSubCmd {
             eprintln!("当前不是 Django 项目, 无法执行");
             return;
         }
+
+        utils::set_env("DJANGO_COLLECT_STATIC", "1");
 
         // attention:
         // it will auto switch working directory
